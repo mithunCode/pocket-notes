@@ -56,7 +56,7 @@ const ChatPage = () => {
 
     await setAllGroups((prev) => [...prev, selectedGroup]);
 
-    localStorage.setItem("groupsStore", JSON.stringify(allGroups));
+    await localStorage.setItem("groupsStore", JSON.stringify(allGroups));
     setText("");
   };
 
@@ -79,18 +79,20 @@ const ChatPage = () => {
           <p>{selectedGroup[0]?.name}</p>
         </div>
         <div className="chat-content">
-          {selectedGroup[0]?.notes?.map((note, i) => {
-            return (
-              <div key={i} className="chat-body">
-                <div>{note[0]?.text}</div>
-                <div className="date-time">
-                  <p>{note[0]?.date}</p>
-                  <p style={{ fontSize: "60px" }}>∙</p>
-                  <p>{note[0]?.time}</p>
+          <div className="chat-content-body">
+            {selectedGroup[0]?.notes?.map((note, i) => {
+              return (
+                <div key={i} className="chat-body">
+                  <div>{note[0]?.text}</div>
+                  <div className="date-time">
+                    <p>{note[0]?.date}</p>
+                    <p style={{ fontSize: "60px" }}>∙</p>
+                    <p>{note[0]?.time}</p>
+                  </div>
                 </div>
-              </div>
-            );
-          })}
+              );
+            })}
+          </div>
         </div>
         <div className="chat-write ">
           <div className="chat-text-area">
@@ -102,12 +104,13 @@ const ChatPage = () => {
               onChange={(e) => setText(e.target.value)}
             ></textarea>
             <img
+              className={text ? "" : "btn-disable"}
               src={send}
               width={25}
               height={25}
               alt="send"
               onClick={() => {
-                handleSubmit();
+                text ? handleSubmit() : "";
               }}
             />
           </div>

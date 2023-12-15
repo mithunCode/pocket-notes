@@ -8,7 +8,7 @@ const Groups = () => {
   const [groups, setGroups] = useState([]);
 
   const navigate = useNavigate();
-
+  const [gId, setgId] = useState("");
   // CLOSE MODAL
   const handleClose = (event) => {
     event.stopPropagation();
@@ -34,16 +34,20 @@ const Groups = () => {
 
   // ADD GROUP
   const addGroup = (inpValue, selColor, id) => {
-    setGroups([
-      ...groups,
-      {
-        id: id,
-        name: inpValue,
-        logo: getIconName(inpValue),
-        color: selColor,
-        notes: [],
-      },
-    ]);
+    inpValue &&
+      selColor &&
+      id &&
+      setGroups([
+        ...groups,
+        {
+          id: id,
+          name: inpValue,
+          logo: getIconName(inpValue),
+          color: selColor,
+          notes: [],
+        },
+      ]);
+    window.location.reload();
   };
 
   //Fetch Existing Groups from Local Storage
@@ -57,12 +61,12 @@ const Groups = () => {
       await localStorage.setItem("groupsStore", JSON.stringify(groups));
 
     setNewGroup();
-    console.log("G");
   }, [groups]);
 
   //Go to Clicked Group
 
   const handleGroup = (id) => {
+    setgId(id);
     navigate(`/chat/${id}`);
   };
 
@@ -79,7 +83,12 @@ const Groups = () => {
               return (
                 <div
                   key={i}
-                  className="group-name-container"
+                  className="group-name-container "
+                  style={{
+                    backgroundColor:
+                      gId == group.id ? `rgba(47, 47, 47, 0.17)` : "",
+                    borderRadius: "16px",
+                  }}
                   onClick={() => handleGroup(group.id)}
                 >
                   <div
